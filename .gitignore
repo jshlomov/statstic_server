@@ -1,0 +1,103 @@
+# General Python ignores
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyo
+
+# Virtual environment
+.venv/
+env/
+venv/
+ENV/
+
+# PyCharm IDE
+.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/dataSources/
+.idea/**/contentModel.xml
+.idea/**/mongoSettings.xml
+.idea/**/sonarlint/
+.idea/**/httpRequests
+.idea/**/gradle.xml
+.idea/**/libraries
+.idea/**/build_file_checksums.ser
+.idea/artifacts
+.idea/compiler.xml
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/modules
+.idea/*.iml
+.idea_modules/
+out/
+
+# JetBrains Run Configurations
+*.iws
+*.ipr
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Coverage
+.coverage
+coverage.xml
+htmlcov/
+
+# Test files
+*.pytest_cache/
+.tox/
+nosetests.xml
+tests.xml
+
+# Build files
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Cache files
+.cache/
+*.bak
+*.swp
+
+# Temporary files
+*.tmp
+*.temp
+*.~*
+
+# Docker
+*.env
+.env.*
+docker-compose.override.yml
+
+# Node.js (if applicable)
+node_modules/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Pycharm REST Client
+.idea/httpRequests/
+
+# CMake (for C/C++ projects)
+cmake-build-*/
+
+# AWS User-specific
+.idea/**/aws.xml
+
+# Crashlytics plugin (Android Studio/IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties

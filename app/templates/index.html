@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <title>Statistics Dashboard</title>
+        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+        <script>
+            function updateFormAction() {
+                const statistic = document.getElementById("statistic").value;
+                const form = document.getElementById("statisticForm");
+                form.action = "http://127.0.0.1:5000/statistics" + statistic;
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Statistics Dashboard</h1>
+        <div>
+            <label for="statistic">Choose a statistic:</label>
+            <select id="statistic" name="statistic" required onchange="updateFormAction()">
+                <option value="/percentage_of_casualties_by_region/">percentage_of_casualties_by_region</option>
+                <option value="/fatal-attacktype/">fatal-attacktype</option>
+                <option value="/get_top_five_attackers/">get_top_five_attackers</option>
+            </select>
+        </div>
+
+        <form
+            id="statisticForm"
+            action="http://127.0.0.1:5000/statistics/percentage_of_casualties_by_region/"
+            method="POST">
+            <div>
+                <label for="filter_location_type">Filter by:</label>
+                <select id="filter_location_type" name="filter_type" required>
+                    <option value="region">Region</option>
+                    <option value="country">Country</option>
+                    <option value="city">City</option>
+                </select>
+            </div>
+            <div>
+                <label for="filter_location_value">Filter value:</label>
+                <input id="filter_location_value" name="filter_value" type="text">
+            </div>
+            <div>
+                <label for="top_value">Top N (leave blank for all):</label>
+                <input id="top_value" name="top_value" type="number">
+            </div>
+            <button type="submit">Show Statistic</button>
+        </form>
+
+        <iframe height="800px" src="{{url_for('static', filename='map.html')}}" width="100%"></iframe>
+    </body>
+</html>
