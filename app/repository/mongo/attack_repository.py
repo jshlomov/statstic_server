@@ -86,7 +86,7 @@ class AttackRepository:
                 }
             },
             {
-                "$sort": {"total_points": -1}
+                "$sort": {"sum": -1}
             },
             {"$limit": 5}
         ]
