@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from pymongo import MongoClient
 from bson import ObjectId
 
@@ -91,6 +93,14 @@ class AttackRepository:
             {"$limit": 5}
         ]
         return list(self.collection.aggregate(pipeline))
+
+    def get_all_attacks_by_years(self, years_ago=None):
+        query = {}
+        if years_ago is not None:
+            cutoff_date = datetime.now() - timedelta(days=years_ago * 365)
+            query["date"] = {"$gte": cutoff_date}
+
+        return list(self.collection.find(query))
 
     def delete_attack_by_id(self, attack_id: str):
         return self.collection.delete_one({"_id": ObjectId(attack_id)}).deleted_count

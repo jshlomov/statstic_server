@@ -1,5 +1,8 @@
 import os
 import folium
+import toolz as tz
+from folium.plugins import HeatMap
+from toolz.curried import partial
 
 from app.db.mongo_database import db_url, db_name, collection_name
 from app.repository.mongo.attack_repository import AttackRepository
@@ -41,6 +44,25 @@ def get_top_five_attackers():
     create_graph_x_y(labels, values,  "Group", "Fatalities", "Fatal Attacks by Attacker")
     return result
 
-def get_geographical_attacks_hotspots():
-    pass
+def get_geographical_attacks_hotspots(years_ago):
+    mongo_repository = AttackRepository(db_url, db_name, collection_name)
+    result = mongo_repository.get_all_attacks_by_years(years_ago)
 
+    m = folium.Map(location=[0, 0], zoom_start=2)
+    heat_list = tz.pipe(
+        result,
+        partial(
+            tz.filter,
+            lambda x: "location" in x and x["location"].get("lat") is not None and x["location"].get("lon") is not None
+        ),
+        partial(tz.map, lambda x: [x["location"]['lat'], x["location"]['lon']]),
+        list
+    )
+    HeatMap(heat_list, radius=15, blur=20).add_to(m)
+    map_path = os.path.join('static', 'map.html')
+    m.save(map_path)
+
+    return result
+
+def get_most_active_groups_in_location():
+    pass
