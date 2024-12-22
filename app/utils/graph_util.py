@@ -5,10 +5,7 @@ import os
 from matplotlib import pyplot as plt
 
 
-def create_graph(result_json, xlabel, ylabel, title):
-    labels = [item["_id"] for item in result_json]
-    values = [item["total_points"] for item in result_json]
-
+def create_graph_x_y(labels, values, xlabel, ylabel, title):
     plt.figure(figsize=(10, 6))
     plt.bar(labels, values, color='skyblue')
     plt.xlabel(xlabel)
