@@ -57,6 +57,7 @@ class AttackRepository:
                     'eventCount': {'$sum': 1},
                     'lat': {'$first': "$location.lat"},
                     'lon': {'$first': "$location.lon"}
+
                 }
             },
             {
@@ -99,8 +100,57 @@ class AttackRepository:
         if years_ago is not None:
             cutoff_date = datetime.now() - timedelta(days=years_ago * 365)
             query["date"] = {"$gte": cutoff_date}
-
         return list(self.collection.find(query))
+
+    def get_most_active_groups_per_country(self, country_name):
+        pipeline = [
+            {
+                "$unwind": "$group_names"
+            },
+            {
+                "$match": {
+                    "group_names": {"$ne": "Unknown"}
+                }
+            },
+            {
+                "$group": {
+                    "_id": {
+                        "country": "$location.country",
+                        "group": "$group_names"
+                    },
+                    "sum": {"$sum": 1},
+                    "lat": {"$first": "$location.lat"},
+                    "lon": {"$first": "$location.lon"}
+                }
+            },
+            {
+                "$sort": {
+                    "_id.country": 1,
+                    "sum": -1
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$_id.country",
+                    "top_groups": {
+                        "$push": {
+                            "group": "$_id.group",
+                            "sum": "$sum",
+                            "lat": "$lat",
+                            "lon": "$lon"
+                        }
+                    }
+                }
+            },
+            {
+                "$project": {
+                    "top_groups": {"$slice": ["$top_groups", 5]}
+                }
+            }
+        ]
+        if country_name is not None:
+            pipeline.insert(1, {"$match": {"location.country": country_name}})
+        return list(self.collection.aggregate(pipeline))
 
     def delete_attack_by_id(self, attack_id: str):
         return self.collection.delete_one({"_id": ObjectId(attack_id)}).deleted_count

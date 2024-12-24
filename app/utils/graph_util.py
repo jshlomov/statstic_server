@@ -5,22 +5,7 @@ import os
 from matplotlib import pyplot as plt
 
 
-def create_graph_x_y(labels, values, xlabel, ylabel, title):
-    plt.figure(figsize=(10, 6))
-    plt.bar(labels, values, color='skyblue')
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.title(title)
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
-
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png')
-    buf.seek(0)
-    plot_data = base64.b64encode(buf.getvalue()).decode('utf8')
-    buf.close()
-    plt.close()
-
+def put_graph_in_html(title, plot_data):
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -39,3 +24,24 @@ def create_graph_x_y(labels, values, xlabel, ylabel, title):
 
     with open(os.path.join('static', 'map.html'), 'w') as file:
         file.write(html_content)
+        file.close()
+
+
+def create_graph_x_y(labels, values, xlabel, ylabel, title):
+    plt.figure(figsize=(10, 6))
+    plt.bar(labels, values, color='skyblue')
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    plot_data = base64.b64encode(buf.getvalue()).decode('utf8')
+    buf.close()
+    plt.close()
+
+    put_graph_in_html(title, plot_data)
+
